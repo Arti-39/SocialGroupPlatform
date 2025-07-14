@@ -9,6 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,7 @@ import org.springframework.data.annotation.CreatedDate;
 @AllArgsConstructor
 @Builder
 @Entity
+@Table(name = "user")
 public class User {
 
   @Id
