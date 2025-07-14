@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class GroupCreateRequestDto {
+public class GroupUpdateRequestDto {
 
   private String title;
   private String description;
