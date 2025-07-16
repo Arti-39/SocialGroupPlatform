@@ -4,6 +4,7 @@ import com.zerobase.socialgroupplatform.domain.User;
 import com.zerobase.socialgroupplatform.dto.GroupCreateRequestDto;
 import com.zerobase.socialgroupplatform.dto.GroupResponseDto;
 import com.zerobase.socialgroupplatform.dto.GroupUpdateRequestDto;
+import com.zerobase.socialgroupplatform.repository.UserRepository;
 import com.zerobase.socialgroupplatform.security.CustomUserDetails;
 import com.zerobase.socialgroupplatform.service.GroupService;
 import jakarta.validation.Valid;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/group")
 public class GroupController {
   private final GroupService groupService;
+  private final UserRepository userRepository;
 
   // 모임 생성
   @PostMapping("/create")
@@ -31,7 +33,7 @@ public class GroupController {
       @RequestBody @Valid GroupCreateRequestDto groupCreateRequestDto,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
-    User groupOwner = customUserDetails.getUser(); // 인증된 사용자 확인
+    User groupOwner = userRepository.findByUserId(customUserDetails.getUserId()); // 인증된 사용자 확인
     GroupResponseDto groupResponseDto = groupService.createGroup(groupCreateRequestDto, groupOwner);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(groupResponseDto);
@@ -44,7 +46,7 @@ public class GroupController {
       @RequestBody @Valid GroupUpdateRequestDto groupUpdateRequestDto,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
-    Long currentUserId = customUserDetails.getUser().getId();
+    Long currentUserId = userRepository.findByUserId(customUserDetails.getUserId()).getId();
 
     GroupResponseDto updatedGroup =
         groupService.updateGroup(id, currentUserId, groupUpdateRequestDto);
@@ -59,7 +61,7 @@ public class GroupController {
       @PathVariable Long id,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
-    Long currentUserId = customUserDetails.getUser().getId();
+    Long currentUserId = userRepository.findByUserId(customUserDetails.getUserId()).getId();
 
     groupService.deleteGroup(id, currentUserId);
 

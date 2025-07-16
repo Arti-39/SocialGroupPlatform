@@ -53,6 +53,9 @@ public class Group {
   private TimeSlot timeSlot;
 
   @Column(nullable = false)
+  private int currentMembers;
+
+  @Column(nullable = false)
   private int maxMembers;
 
   @Column(nullable = false)

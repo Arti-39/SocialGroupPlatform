@@ -49,6 +49,7 @@ public class GroupService {
         .category(category)
         .location(location)
         .timeSlot(timeSlot)
+        .currentMembers(1)
         .maxMembers(groupCreateRequestDto.getMaxMembers())
         .isPublic(groupCreateRequestDto.isPublic())
         .autoAccept(groupCreateRequestDto.isAutoAccept())
