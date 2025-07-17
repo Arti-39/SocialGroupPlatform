@@ -1,7 +1,10 @@
 package com.zerobase.socialgroupplatform.controller;
 
+import com.zerobase.socialgroupplatform.domain.User;
 import com.zerobase.socialgroupplatform.domain.common.ApplicationStatus;
 import com.zerobase.socialgroupplatform.dto.GroupApplicationResponseDto;
+import com.zerobase.socialgroupplatform.exception.CustomException;
+import com.zerobase.socialgroupplatform.exception.ErrorCode;
 import com.zerobase.socialgroupplatform.repository.UserRepository;
 import com.zerobase.socialgroupplatform.security.CustomUserDetails;
 import com.zerobase.socialgroupplatform.service.GroupApplicationService;
@@ -29,9 +32,8 @@ public class GroupApplicationController {
       @PathVariable Long groupId,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
-    Long currentUserId = userRepository.findByUserId(customUserDetails.getUserId()).getId();
-
-    groupApplicationService.applyToGroup(groupId, currentUserId);
+    User currentUser = validateUser(customUserDetails);
+    groupApplicationService.applyToGroup(groupId, currentUser.getId());
 
     return ResponseEntity.ok("참가 신청이 완료되었습니다.");
   }
@@ -43,9 +45,8 @@ public class GroupApplicationController {
       @PathVariable Long applicationId,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
-    Long currentUserId = userRepository.findByUserId(customUserDetails.getUserId()).getId();
-
-    groupApplicationService.updateApplicationStatus(applicationId, currentUserId,
+    User currentUser = validateUser(customUserDetails);
+    groupApplicationService.updateApplicationStatus(applicationId, currentUser.getId(),
             ApplicationStatus.ACCEPTED);
 
     return ResponseEntity.ok("신청이 승인되었습니다.");
@@ -57,9 +58,8 @@ public class GroupApplicationController {
       @PathVariable Long applicationId,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
-    Long currentUserId = userRepository.findByUserId(customUserDetails.getUserId()).getId();
-
-    groupApplicationService.updateApplicationStatus(applicationId, currentUserId,
+    User currentUser = validateUser(customUserDetails);
+    groupApplicationService.updateApplicationStatus(applicationId, currentUser.getId(),
             ApplicationStatus.REJECTED);
 
     return ResponseEntity.ok("신청이 거절되었습니다.");
@@ -71,9 +71,8 @@ public class GroupApplicationController {
       @PathVariable Long applicationId,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
-    Long currentUserId = userRepository.findByUserId(customUserDetails.getUserId()).getId();
-
-    groupApplicationService.cancelApplication(applicationId, currentUserId);
+    User currentUser = validateUser(customUserDetails);
+    groupApplicationService.cancelApplication(applicationId, currentUser.getId());
 
     return ResponseEntity.ok("신청을 취소하였습니다.");
   }
@@ -83,10 +82,9 @@ public class GroupApplicationController {
   public ResponseEntity<List<GroupApplicationResponseDto>> getMyApplication(
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
-    Long currentUserId = userRepository.findByUserId(customUserDetails.getUserId()).getId();
-
+    User currentUser = validateUser(customUserDetails);
     List<GroupApplicationResponseDto> groupApplicationList =
-        groupApplicationService.getApplicationByUser(currentUserId);
+        groupApplicationService.getApplicationByUser(currentUser.getId());
 
     return ResponseEntity.ok(groupApplicationList);
   }
@@ -97,10 +95,9 @@ public class GroupApplicationController {
       @PathVariable Long groupId,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
-    Long currentUserId = userRepository.findByUserId(customUserDetails.getUserId()).getId();
-
+    User currentUser = validateUser(customUserDetails);
     List<GroupApplicationResponseDto> groupApplicationList =
-        groupApplicationService.getApplicationByGroup(groupId, currentUserId);
+        groupApplicationService.getApplicationByGroup(groupId, currentUser.getId());
 
     return ResponseEntity.ok(groupApplicationList);
   }
@@ -111,10 +108,15 @@ public class GroupApplicationController {
       @PathVariable Long groupId,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
-    Long currentUserId = userRepository.findByUserId(customUserDetails.getUserId()).getId();
-
-    groupApplicationService.withdrawFromGroup(groupId, currentUserId);
+    User currentUser = validateUser(customUserDetails);
+    groupApplicationService.withdrawFromGroup(groupId, currentUser.getId());
 
     return ResponseEntity.ok("탈퇴하였습니다.");
+  }
+
+  // 사용자 인증 확인
+  public User validateUser(CustomUserDetails customUserDetails) {
+    return userRepository.findByUserId(customUserDetails.getUserId())
+        .orElseThrow(() -> new CustomException(ErrorCode.NO_PERMISSION));
   }
 }
