@@ -1,6 +1,7 @@
 package com.zerobase.socialgroupplatform.security;
 
 import com.zerobase.socialgroupplatform.domain.User;
+import com.zerobase.socialgroupplatform.domain.common.UserRole;
 import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
@@ -11,25 +12,27 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Getter
 public class CustomUserDetails implements UserDetails {
 
-  private final User user;
+  private final String userId;
+  private final UserRole role;
 
   public CustomUserDetails(User user) {
-    this.user = user;
+    this.userId = user.getUserId();
+    this.role = user.getRole();
   }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(new SimpleGrantedAuthority(user.getRole().name()));
+    return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
   }
 
   @Override
   public String getPassword() {
-    return user.getPassword();
+    return null;
   }
 
   @Override
   public String getUsername() {
-    return user.getEmail();
+    return userId;
   }
 
   @Override
