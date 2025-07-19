@@ -35,7 +35,10 @@ public enum ErrorCode {
   NOT_FOUND_APPLICATION(HttpStatus.NOT_FOUND, "신청 정보가 없습니다."),
   STATUS_IS_NOT_PENDING(HttpStatus.CONFLICT, "승인 대기 상태가 아닙니다."),
   CANNOT_CANCEL(HttpStatus.CONFLICT, "취소할 수 없는 상태입니다."),
-  NOT_IN_GROUP(HttpStatus.CONFLICT, "해당 모임에 참가하고 있지 않습니다.");
+  NOT_IN_GROUP(HttpStatus.CONFLICT, "해당 모임에 참가하고 있지 않습니다."),
+
+  // 모임 일정 관련
+  NOT_FOUND_SCHEDULE(HttpStatus.NOT_FOUND, "일정이 존재하지 않습니다.");
 
   private final HttpStatus status;
   private final String message;
