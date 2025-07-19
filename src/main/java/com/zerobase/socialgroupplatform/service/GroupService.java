@@ -38,10 +38,6 @@ public class GroupService {
     Location location = getLocation(groupCreateRequestDto.getLocationId());
     TimeSlot timeSlot = getTimeSlot(groupCreateRequestDto.getTimeSlotId());
 
-    // Location 테이블에서 Point 값 복사
-    // 참조하지 않고 복사하는 이유는 이후 검색 기능에서 더 빠른 연산을 위해
-    String locationPoint = location.getPoint();
-
     Group group = Group.builder()
         .groupOwner(groupOwner)
         .title(groupCreateRequestDto.getTitle())
@@ -52,7 +48,6 @@ public class GroupService {
         .maxMembers(groupCreateRequestDto.getMaxMembers())
         .isPublic(groupCreateRequestDto.isPublic())
         .autoAccept(groupCreateRequestDto.isAutoAccept())
-        .locationPoint(locationPoint)
         .createdDate(LocalDateTime.now())
         .build();
 

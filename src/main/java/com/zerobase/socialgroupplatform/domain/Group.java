@@ -61,9 +61,6 @@ public class Group {
   @Column(nullable = false)
   private boolean autoAccept;
 
-  @Column(columnDefinition = "POINT")
-  private String locationPoint;
-
   @Column(nullable = false)
   @CreatedDate
   private LocalDateTime createdDate;

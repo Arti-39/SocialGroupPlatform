@@ -42,7 +42,7 @@ public class GroupController {
   }
 
   // 모임 수정
-  @PutMapping("/update/{id}")
+  @PutMapping("/{id}")
   public ResponseEntity<GroupResponseDto> updateGroup(
       @PathVariable Long id,
       @RequestBody @Valid GroupUpdateRequestDto groupUpdateRequestDto,
@@ -58,7 +58,7 @@ public class GroupController {
 
 
   // 모임 삭제
-  @DeleteMapping("/delete/{id}")
+  @DeleteMapping("/{id}")
   public ResponseEntity<GroupResponseDto> deleteGroup(
       @PathVariable Long id,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
