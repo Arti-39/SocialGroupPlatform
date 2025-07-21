@@ -10,6 +10,7 @@ public enum ErrorCode {
 
   // 공통
   INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 에러입니다."),
+  NO_PERMISSION(HttpStatus.FORBIDDEN, "권한이 없습니다."),
 
   // 회원 관련
   DUPLICATE_USER_ID(HttpStatus.CONFLICT, "이미 사용 중인 아이디입니다."),
