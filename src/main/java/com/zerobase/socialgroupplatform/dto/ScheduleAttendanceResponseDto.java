@@ -16,11 +16,9 @@ public class ScheduleAttendanceResponseDto {
   private Long userId;
   private AttendanceStatus status;
 
-  public static ScheduleAttendanceResponseDto fromEntity(ScheduleAttendance scheduleAttendance) {
-    return ScheduleAttendanceResponseDto.builder()
-        .scheduleId(scheduleAttendance.getId())
-        .userId(scheduleAttendance.getUser().getId())
-        .status(scheduleAttendance.getStatus())
-        .build();
+  public ScheduleAttendanceResponseDto(ScheduleAttendance scheduleAttendance) {
+     this.scheduleId = scheduleAttendance.getGroupSchedule().getId();
+     this.userId = scheduleAttendance.getUser().getId();
+     this.status = scheduleAttendance.getStatus();
   }
 }

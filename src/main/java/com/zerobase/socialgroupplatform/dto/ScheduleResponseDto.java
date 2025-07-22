@@ -2,9 +2,9 @@ package com.zerobase.socialgroupplatform.dto;
 
 import com.zerobase.socialgroupplatform.domain.GroupSchedule;
 import java.time.LocalDateTime;
-import lombok.Builder;
+import lombok.Getter;
 
-@Builder
+@Getter
 public class ScheduleResponseDto {
   private Long scheduleId;
   private Long groupId;
@@ -13,14 +13,12 @@ public class ScheduleResponseDto {
   private String description;
   private LocalDateTime createdDate;
 
-  public static ScheduleResponseDto fromEntity(GroupSchedule groupSchedule) {
-    return ScheduleResponseDto.builder()
-        .scheduleId(groupSchedule.getId())
-        .groupId(groupSchedule.getGroup().getId())
-        .scheduleDate(groupSchedule.getScheduleDate())
-        .location(groupSchedule.getLocation())
-        .description(groupSchedule.getDescription())
-        .createdDate(groupSchedule.getCreatedDate())
-        .build();
+  public ScheduleResponseDto(GroupSchedule groupSchedule) {
+    this.scheduleId = groupSchedule.getId();
+    this.groupId = groupSchedule.getGroup().getId();
+    this.scheduleDate = groupSchedule.getScheduleDate();
+    this.location = groupSchedule.getLocation();
+    this.description = groupSchedule.getDescription();
+    this.createdDate = groupSchedule.getCreatedDate();
   }
 }

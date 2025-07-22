@@ -3,9 +3,9 @@ package com.zerobase.socialgroupplatform.dto;
 import com.zerobase.socialgroupplatform.domain.GroupSchedule;
 import java.time.LocalDateTime;
 import java.util.List;
-import lombok.Builder;
+import lombok.Getter;
 
-@Builder
+@Getter
 public class ScheduleDetailResponseDto {
   private Long scheduleId;
   private Long groupId;
@@ -15,17 +15,15 @@ public class ScheduleDetailResponseDto {
   private List<ScheduleAttendanceResponseDto> attendanceList;
   private LocalDateTime createdDate;
 
-  public static ScheduleDetailResponseDto of(GroupSchedule groupSchedule,
+  public ScheduleDetailResponseDto(GroupSchedule groupSchedule,
       List<ScheduleAttendanceResponseDto> scheduleAttendanceResponseDto) {
 
-    return ScheduleDetailResponseDto.builder()
-        .scheduleId(groupSchedule.getId())
-        .groupId(groupSchedule.getGroup().getId())
-        .scheduleDate(groupSchedule.getScheduleDate())
-        .location(groupSchedule.getLocation())
-        .description(groupSchedule.getDescription())
-        .attendanceList(scheduleAttendanceResponseDto)
-        .createdDate(groupSchedule.getCreatedDate())
-        .build();
+    this.scheduleId = groupSchedule.getId();
+    this.groupId = groupSchedule.getGroup().getId();
+    this.scheduleDate = groupSchedule.getScheduleDate();
+    this.location = groupSchedule.getLocation();
+    this.description = groupSchedule.getDescription();
+    this.attendanceList = scheduleAttendanceResponseDto;
+    this.createdDate = groupSchedule.getCreatedDate();
   }
 }

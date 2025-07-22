@@ -1,6 +1,9 @@
 server:
   port: 8080
 
+jwt:
+  secret: "ThisIsAReallyStrongSecretKey123456789ABcdEisTooLongLUckY"
+
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/project?serverTimezone=UTC&characterEncoding=UTF-8

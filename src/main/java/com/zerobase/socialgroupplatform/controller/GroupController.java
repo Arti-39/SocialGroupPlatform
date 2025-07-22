@@ -7,6 +7,7 @@ import com.zerobase.socialgroupplatform.dto.GroupUpdateRequestDto;
 import com.zerobase.socialgroupplatform.repository.UserRepository;
 import com.zerobase.socialgroupplatform.security.CustomUserDetails;
 import com.zerobase.socialgroupplatform.service.GroupService;
+import com.zerobase.socialgroupplatform.service.UserValidationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/group")
 public class GroupController {
   private final GroupService groupService;
+  private final UserValidationService userValidationService;
   private final UserRepository userRepository;
 
   // 모임 생성
@@ -33,37 +35,37 @@ public class GroupController {
       @RequestBody @Valid GroupCreateRequestDto groupCreateRequestDto,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
-    User groupOwner = userRepository.findByUserId(customUserDetails.getUserId()); // 인증된 사용자 확인
-    GroupResponseDto groupResponseDto = groupService.createGroup(groupCreateRequestDto, groupOwner);
+    User currentUser = userValidationService.validateUser(customUserDetails);
+    GroupResponseDto groupResponseDto = groupService.createGroup(groupCreateRequestDto, currentUser);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(groupResponseDto);
   }
 
   // 모임 수정
-  @PutMapping("/update/{id}")
+  @PutMapping("/{id}")
   public ResponseEntity<GroupResponseDto> updateGroup(
       @PathVariable Long id,
       @RequestBody @Valid GroupUpdateRequestDto groupUpdateRequestDto,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
-    Long currentUserId = userRepository.findByUserId(customUserDetails.getUserId()).getId();
+    User currentUser = userValidationService.validateUser(customUserDetails);
 
-    GroupResponseDto updatedGroup =
-        groupService.updateGroup(id, currentUserId, groupUpdateRequestDto);
+    GroupResponseDto groupResponseDto =
+        groupService.updateGroup(id, currentUser.getId(), groupUpdateRequestDto);
 
-    return ResponseEntity.ok(updatedGroup);
+    return ResponseEntity.ok(groupResponseDto);
   }
 
 
   // 모임 삭제
-  @DeleteMapping("/delete/{id}")
+  @DeleteMapping("/{id}")
   public ResponseEntity<GroupResponseDto> deleteGroup(
       @PathVariable Long id,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
-    Long currentUserId = userRepository.findByUserId(customUserDetails.getUserId()).getId();
+    User currentUser = userValidationService.validateUser(customUserDetails);
 
-    groupService.deleteGroup(id, currentUserId);
+    groupService.deleteGroup(id, currentUser.getId());
 
     return ResponseEntity.noContent().build();
   }
