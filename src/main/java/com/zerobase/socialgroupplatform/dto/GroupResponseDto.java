@@ -15,7 +15,6 @@ public class GroupResponseDto {
   private int maxMembers;
   private boolean isPublic;
   private boolean autoAccept;
-  private String locationPoint;
   private String groupOwnerNickname;
   private LocalDateTime createdDate;
 
@@ -29,7 +28,6 @@ public class GroupResponseDto {
     this.maxMembers = group.getMaxMembers();
     this.isPublic = group.isPublic();
     this.autoAccept = group.isAutoAccept();
-    this.locationPoint = group.getLocationPoint();
     this.groupOwnerNickname = group.getGroupOwner().getNickname();
     this.createdDate = group.getCreatedDate();
   }
