@@ -2,6 +2,7 @@ package com.zerobase.socialgroupplatform.controller;
 
 import com.zerobase.socialgroupplatform.dto.UserLoginRequestDto;
 import com.zerobase.socialgroupplatform.dto.UserLoginResponseDto;
+import com.zerobase.socialgroupplatform.dto.UserResponseDto;
 import com.zerobase.socialgroupplatform.dto.UserSignUpRequestDto;
 import com.zerobase.socialgroupplatform.service.UserService;
 import jakarta.validation.Valid;
@@ -20,9 +21,9 @@ public class UserController {
 
   // 회원가입
   @PostMapping("/signup")
-  public ResponseEntity<String> signUp(@RequestBody UserSignUpRequestDto userSignUpRequestDto) {
-    userService.signUp(userSignUpRequestDto);
-    return ResponseEntity.ok("회원가입 되었습니다.");
+  public ResponseEntity<UserResponseDto> signUp(@RequestBody UserSignUpRequestDto userSignUpRequestDto) {
+    UserResponseDto userResponseDto = userService.signUp(userSignUpRequestDto);
+    return ResponseEntity.ok(userResponseDto);
   }
 
   // 로그인

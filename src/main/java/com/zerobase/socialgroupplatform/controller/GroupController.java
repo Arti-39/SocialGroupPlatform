@@ -4,7 +4,6 @@ import com.zerobase.socialgroupplatform.domain.User;
 import com.zerobase.socialgroupplatform.dto.GroupCreateRequestDto;
 import com.zerobase.socialgroupplatform.dto.GroupResponseDto;
 import com.zerobase.socialgroupplatform.dto.GroupUpdateRequestDto;
-import com.zerobase.socialgroupplatform.repository.UserRepository;
 import com.zerobase.socialgroupplatform.security.CustomUserDetails;
 import com.zerobase.socialgroupplatform.service.GroupService;
 import com.zerobase.socialgroupplatform.service.UserValidationService;
@@ -27,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class GroupController {
   private final GroupService groupService;
   private final UserValidationService userValidationService;
-  private final UserRepository userRepository;
 
   // 모임 생성
   @PostMapping

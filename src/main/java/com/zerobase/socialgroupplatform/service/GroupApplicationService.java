@@ -24,7 +24,7 @@ public class GroupApplicationService {
   private final UserRepository userRepository;
 
   // 모임 참가 신청
-  public void applyToGroup(Long groupId, Long userId) {
+  public GroupApplicationResponseDto applyToGroup(Long groupId, Long userId) {
     Group group = groupRepository.findById(groupId)
         .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_GROUP));
     User user = userRepository.findById(userId)
@@ -70,11 +70,11 @@ public class GroupApplicationService {
                                                         .appliedDate(LocalDateTime.now())
                                                         .build();
 
-    groupApplicationRepository.save(groupApplication);
+    return new GroupApplicationResponseDto(groupApplicationRepository.save(groupApplication));
   }
 
   // 신청 승인/거절(모임장)
-  public void updateApplicationStatus(Long applicationId, Long groupOwnerId,
+  public GroupApplicationResponseDto updateApplicationStatus(Long applicationId, Long groupOwnerId,
       ApplicationStatus applicationStatus) {
 
     GroupApplication groupApplication = groupApplicationRepository.findById(applicationId)
@@ -99,15 +99,15 @@ public class GroupApplicationService {
 
       // 현재 인원 증가
       group.setCurrentMembers(group.getCurrentMembers() + 1);
-      groupRepository.save(group);
     }
 
     groupApplication.setStatus(applicationStatus);
-    groupApplicationRepository.save(groupApplication);
+
+    return new GroupApplicationResponseDto(groupApplication);
   }
 
   // 신청 취소(사용자)
-  public void cancelApplication(Long applicationId, Long userId) {
+  public GroupApplicationResponseDto cancelApplication(Long applicationId, Long userId) {
     GroupApplication groupApplication = groupApplicationRepository.findById(applicationId)
         .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_APPLICATION));
 
@@ -120,7 +120,8 @@ public class GroupApplicationService {
     }
 
     groupApplication.setStatus(ApplicationStatus.CANCELED);
-    groupApplicationRepository.save(groupApplication);
+
+    return new GroupApplicationResponseDto(groupApplication);
   }
 
   // 신청 내역 조회(사용자)
@@ -128,7 +129,7 @@ public class GroupApplicationService {
     List<GroupApplication> groupApplicationList = groupApplicationRepository.findByUserId(userId);
 
     return groupApplicationList.stream()
-        .map(GroupApplicationResponseDto::fromEntity)
+        .map(GroupApplicationResponseDto::new)
         .collect(Collectors.toList());
   }
 
@@ -144,20 +145,21 @@ public class GroupApplicationService {
     List<GroupApplication> groupApplicationList = groupApplicationRepository.findByGroupId(groupId);
 
     return groupApplicationList.stream()
-        .map(GroupApplicationResponseDto::fromEntity)
+        .map(GroupApplicationResponseDto::new)
         .collect(Collectors.toList());
   }
 
   // 모임 탈퇴
-  public void withdrawFromGroup(Long groupId, Long userId) {
+  public GroupApplicationResponseDto withdrawFromGroup(Long groupId, Long userId) {
     GroupApplication groupApplication = groupApplicationRepository
         .findByGroupIdAndUserIdAndStatus(groupId, userId, ApplicationStatus.ACCEPTED)
         .orElseThrow(() -> new CustomException(ErrorCode.NOT_IN_GROUP));
 
     Group group = groupApplication.getGroup();
+
     group.setCurrentMembers(group.getCurrentMembers() - 1);
-    groupRepository.save(group);
     groupApplication.setStatus(ApplicationStatus.WITHDRAWN);
-    groupApplicationRepository.save(groupApplication);
+
+    return new GroupApplicationResponseDto(groupApplication);
   }
 }

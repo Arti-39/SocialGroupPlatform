@@ -26,53 +26,57 @@ public class GroupApplicationController {
 
   // 모임 참가 신청(사용자)
   @PostMapping("/{groupId}")
-  public ResponseEntity<?> applyToGroup(
+  public ResponseEntity<GroupApplicationResponseDto> applyToGroup(
       @PathVariable Long groupId,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
     User currentUser = userValidationService.validateUser(customUserDetails);
-    groupApplicationService.applyToGroup(groupId, currentUser.getId());
+    GroupApplicationResponseDto groupApplicationResponseDto =
+        groupApplicationService.applyToGroup(groupId, currentUser.getId());
 
-    return ResponseEntity.ok("참가 신청이 완료되었습니다.");
+    return ResponseEntity.ok(groupApplicationResponseDto);
   }
 
 
   // 신청 승인(모임장)
   @PutMapping("/{applicationId}/accept")
-  public ResponseEntity<?> acceptApplication(
+  public ResponseEntity<GroupApplicationResponseDto> acceptApplication(
       @PathVariable Long applicationId,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
     User currentUser = userValidationService.validateUser(customUserDetails);
-    groupApplicationService.updateApplicationStatus(applicationId, currentUser.getId(),
+    GroupApplicationResponseDto groupApplicationResponseDto =
+        groupApplicationService.updateApplicationStatus(applicationId, currentUser.getId(),
             ApplicationStatus.ACCEPTED);
 
-    return ResponseEntity.ok("신청이 승인되었습니다.");
+    return ResponseEntity.ok(groupApplicationResponseDto);
   }
 
   // 신청 거절(모임장)
   @PutMapping("/{applicationId}/reject")
-  public ResponseEntity<?> rejectApplication(
+  public ResponseEntity<GroupApplicationResponseDto> rejectApplication(
       @PathVariable Long applicationId,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
     User currentUser = userValidationService.validateUser(customUserDetails);
-    groupApplicationService.updateApplicationStatus(applicationId, currentUser.getId(),
+    GroupApplicationResponseDto groupApplicationResponseDto =
+        groupApplicationService.updateApplicationStatus(applicationId, currentUser.getId(),
             ApplicationStatus.REJECTED);
 
-    return ResponseEntity.ok("신청이 거절되었습니다.");
+    return ResponseEntity.ok(groupApplicationResponseDto);
   }
 
   // 신청 취소(사용자)
   @PutMapping("/{applicationId}/cancel")
-  public ResponseEntity<?> cancelApplication(
+  public ResponseEntity<GroupApplicationResponseDto> cancelApplication(
       @PathVariable Long applicationId,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
     User currentUser = userValidationService.validateUser(customUserDetails);
-    groupApplicationService.cancelApplication(applicationId, currentUser.getId());
+    GroupApplicationResponseDto groupApplicationResponseDto =
+        groupApplicationService.cancelApplication(applicationId, currentUser.getId());
 
-    return ResponseEntity.ok("신청을 취소하였습니다.");
+    return ResponseEntity.ok(groupApplicationResponseDto);
   }
 
   // 신청 내역 조회(사용자)
@@ -102,13 +106,14 @@ public class GroupApplicationController {
 
   // 모임 탈퇴
   @PutMapping("/{groupId}/withdraw")
-  public ResponseEntity<?> withdrawFromGroup(
+  public ResponseEntity<GroupApplicationResponseDto> withdrawFromGroup(
       @PathVariable Long groupId,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
     User currentUser = userValidationService.validateUser(customUserDetails);
-    groupApplicationService.withdrawFromGroup(groupId, currentUser.getId());
+    GroupApplicationResponseDto groupApplicationResponseDto =
+        groupApplicationService.withdrawFromGroup(groupId, currentUser.getId());
 
-    return ResponseEntity.ok("탈퇴하였습니다.");
+    return ResponseEntity.ok(groupApplicationResponseDto);
   }
 }

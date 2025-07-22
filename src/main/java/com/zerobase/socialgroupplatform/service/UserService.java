@@ -5,6 +5,7 @@ import com.zerobase.socialgroupplatform.domain.common.UserRole;
 import com.zerobase.socialgroupplatform.domain.common.UserStatus;
 import com.zerobase.socialgroupplatform.dto.UserLoginRequestDto;
 import com.zerobase.socialgroupplatform.dto.UserLoginResponseDto;
+import com.zerobase.socialgroupplatform.dto.UserResponseDto;
 import com.zerobase.socialgroupplatform.dto.UserSignUpRequestDto;
 import com.zerobase.socialgroupplatform.exception.CustomException;
 import com.zerobase.socialgroupplatform.exception.ErrorCode;
@@ -23,7 +24,7 @@ public class UserService {
   private final JwtTokenProvider jwtTokenProvider;
 
   // 회원가입
-  public void signUp(UserSignUpRequestDto userSignUpRequestDto) {
+  public UserResponseDto signUp(UserSignUpRequestDto userSignUpRequestDto) {
 
     // 아이디, 이메일, 닉네임 중복 검사
     if (userRepository.existsByUserId(userSignUpRequestDto.getUserId())) {
@@ -52,6 +53,7 @@ public class UserService {
         .build();
 
     userRepository.save(user);
+    return new UserResponseDto(user);
   }
 
   // 로그인
