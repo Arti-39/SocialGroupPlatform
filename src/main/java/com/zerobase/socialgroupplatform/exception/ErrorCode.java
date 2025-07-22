@@ -38,7 +38,10 @@ public enum ErrorCode {
   NOT_IN_GROUP(HttpStatus.CONFLICT, "해당 모임에 참가하고 있지 않습니다."),
 
   // 모임 일정 관련
-  NOT_FOUND_SCHEDULE(HttpStatus.NOT_FOUND, "일정이 존재하지 않습니다.");
+  NOT_FOUND_SCHEDULE(HttpStatus.NOT_FOUND, "일정이 존재하지 않습니다."),
+  INVALID_GROUP_SCHEDULE(HttpStatus.NOT_FOUND, "유효하지 않은 모임 일정입니다."),
+  ALREADY_EXISTS_ATTENDANCE(HttpStatus.CONFLICT, "이미 참석 여부를 설정하였습니다."),
+  NOT_FOUND_ATTENDANCE(HttpStatus.NOT_FOUND, "참석 여부를 설정하지 않았습니다.");
 
   private final HttpStatus status;
   private final String message;
