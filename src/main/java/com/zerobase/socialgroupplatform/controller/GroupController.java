@@ -4,11 +4,10 @@ import com.zerobase.socialgroupplatform.domain.User;
 import com.zerobase.socialgroupplatform.dto.GroupCreateRequestDto;
 import com.zerobase.socialgroupplatform.dto.GroupResponseDto;
 import com.zerobase.socialgroupplatform.dto.GroupUpdateRequestDto;
-import com.zerobase.socialgroupplatform.exception.CustomException;
-import com.zerobase.socialgroupplatform.exception.ErrorCode;
 import com.zerobase.socialgroupplatform.repository.UserRepository;
 import com.zerobase.socialgroupplatform.security.CustomUserDetails;
 import com.zerobase.socialgroupplatform.service.GroupService;
+import com.zerobase.socialgroupplatform.service.UserValidationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,15 +26,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/group")
 public class GroupController {
   private final GroupService groupService;
+  private final UserValidationService userValidationService;
   private final UserRepository userRepository;
 
   // 모임 생성
-  @PostMapping("/create")
+  @PostMapping
   public ResponseEntity<GroupResponseDto> createGroup(
       @RequestBody @Valid GroupCreateRequestDto groupCreateRequestDto,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
-    User currentUser = validateUser(customUserDetails); // 인증된 사용자 확인
+    User currentUser = userValidationService.validateUser(customUserDetails);
     GroupResponseDto groupResponseDto = groupService.createGroup(groupCreateRequestDto, currentUser);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(groupResponseDto);
@@ -48,12 +48,12 @@ public class GroupController {
       @RequestBody @Valid GroupUpdateRequestDto groupUpdateRequestDto,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
-    User currentUser = validateUser(customUserDetails);
+    User currentUser = userValidationService.validateUser(customUserDetails);
 
-    GroupResponseDto updatedGroup =
+    GroupResponseDto groupResponseDto =
         groupService.updateGroup(id, currentUser.getId(), groupUpdateRequestDto);
 
-    return ResponseEntity.ok(updatedGroup);
+    return ResponseEntity.ok(groupResponseDto);
   }
 
 
@@ -63,16 +63,10 @@ public class GroupController {
       @PathVariable Long id,
       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
-    User currentUser = validateUser(customUserDetails);
+    User currentUser = userValidationService.validateUser(customUserDetails);
 
     groupService.deleteGroup(id, currentUser.getId());
 
     return ResponseEntity.noContent().build();
-  }
-
-  // 사용자 인증 확인
-  public User validateUser(CustomUserDetails customUserDetails) {
-    return userRepository.findByUserId(customUserDetails.getUserId())
-        .orElseThrow(() -> new CustomException(ErrorCode.NO_PERMISSION));
   }
 }

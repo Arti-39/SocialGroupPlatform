@@ -26,7 +26,6 @@ public enum ErrorCode {
   INACTIVE_CATEGORY(HttpStatus.NOT_FOUND, "비활성화된 카테고리입니다."),
   INACTIVE_LOCATION(HttpStatus.NOT_FOUND, "비활성화된 지역 정보입니다."),
   INACTIVE_TIMESLOT(HttpStatus.NOT_FOUND, "비활성화된 시간대입니다."),
-
   NOT_FOUND_GROUP(HttpStatus.NOT_FOUND, "존재하지 않는 모임/스터디입니다."),
 
   // 모임 신청 관련
@@ -36,7 +35,13 @@ public enum ErrorCode {
   NOT_FOUND_APPLICATION(HttpStatus.NOT_FOUND, "신청 정보가 없습니다."),
   STATUS_IS_NOT_PENDING(HttpStatus.CONFLICT, "승인 대기 상태가 아닙니다."),
   CANNOT_CANCEL(HttpStatus.CONFLICT, "취소할 수 없는 상태입니다."),
-  NOT_IN_GROUP(HttpStatus.CONFLICT, "해당 모임에 참가하고 있지 않습니다.");
+  NOT_IN_GROUP(HttpStatus.CONFLICT, "해당 모임에 참가하고 있지 않습니다."),
+
+  // 모임 일정 관련
+  NOT_FOUND_SCHEDULE(HttpStatus.NOT_FOUND, "일정이 존재하지 않습니다."),
+  INVALID_GROUP_SCHEDULE(HttpStatus.NOT_FOUND, "유효하지 않은 모임 일정입니다."),
+  ALREADY_EXISTS_ATTENDANCE(HttpStatus.CONFLICT, "이미 참석 여부를 설정하였습니다."),
+  NOT_FOUND_ATTENDANCE(HttpStatus.NOT_FOUND, "참석 여부를 설정하지 않았습니다.");
 
   private final HttpStatus status;
   private final String message;

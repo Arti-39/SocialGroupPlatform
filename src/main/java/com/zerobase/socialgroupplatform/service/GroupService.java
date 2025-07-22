@@ -76,7 +76,7 @@ public class GroupService {
     group.setPublic(groupUpdateRequestDto.isPublic());
     group.setAutoAccept(groupUpdateRequestDto.isAutoAccept());
 
-    return new GroupResponseDto(groupRepository.save(group));
+    return new GroupResponseDto(group);
   }
 
   // 모임 삭제
