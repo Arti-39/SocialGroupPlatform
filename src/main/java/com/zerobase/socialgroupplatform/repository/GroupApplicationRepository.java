@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface GroupApplicationRepository extends JpaRepository<GroupApplication, Long> {
 
   boolean existsByGroupIdAndUserIdAndStatusIn(Long groupId, Long userId, Collection<ApplicationStatus> statuses);
+  boolean existsByGroupIdAndUserIdAndStatus(Long groupId, Long userId, ApplicationStatus applicationStatus);
 
   List<GroupApplication> findByUserId(Long userId);
   List<GroupApplication> findByGroupId(Long groupId);
