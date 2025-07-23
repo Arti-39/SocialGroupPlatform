@@ -47,7 +47,7 @@ public class UserService {
         .userId(userSignUpRequestDto.getUserId())
         .password(encodedPassword)
         .nickname(userSignUpRequestDto.getNickname())
-        .role(UserRole.MEMBER)
+        .role(UserRole.USER)
         .status(UserStatus.ACTIVE)
         .createdDate(LocalDateTime.now())
         .build();
