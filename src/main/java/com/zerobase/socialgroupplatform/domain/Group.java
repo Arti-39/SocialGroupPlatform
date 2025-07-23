@@ -31,7 +31,7 @@ public class Group {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "group_owner_id", nullable = false)
+  @JoinColumn(name = "user_id", nullable = false)
   private User groupOwner;
 
   @Column(nullable = false, length = 100)
